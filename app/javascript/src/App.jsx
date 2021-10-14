@@ -5,6 +5,7 @@ import { Route, Switch, BrowserRouter as Router } from "react-router-dom";
 import { setAuthHeaders } from "apis/axios";
 import Dashboard from "components/Dashboard";
 import PageLoader from "components/PageLoader";
+import CreateTask from "components/Tasks/CreateTask";
 
 const App = () => {
   const [loading, setLoading] = useState(true);
@@ -25,7 +26,7 @@ const App = () => {
   return (
     <Router>
       <Switch>
-        <Route exact path="/" render={() => <div>Home</div>} />
+        <Route exact path="/tasks/create" component={CreateTask} />
         <Route exact path="/dashboard" component={Dashboard} />
       </Switch>
     </Router>
