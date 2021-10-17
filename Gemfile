@@ -65,3 +65,4 @@ group :development, :test do
   gem "faker"
 end
 gem "pundit"
+gem "sidekiq"
