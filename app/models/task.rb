@@ -2,6 +2,7 @@
 
 class Task < ApplicationRecord
   RESTRICTED_ATTRIBUTES = %i[title user_id]
+  enum status: { unstarred: 0, starred: 1 }
   enum progress: { pending: 0, completed: 1 }
   has_many :comments, dependent: :destroy
   belongs_to :assigned_user, foreign_key: "assigned_user_id", class_name: "User"
@@ -12,7 +13,6 @@ class Task < ApplicationRecord
   validate :slug_not_changed
 
   before_create :set_slug
-  before_destroy :assign_tasks_to_task_owners
 
   private
 
@@ -39,10 +39,14 @@ class Task < ApplicationRecord
       end
     end
 
-    def assign_tasks_to_task_owners
-      tasks_whose_owner_is_not_current_user = assigned_tasks.select { |task| task.task_owner_id != id }
-      tasks_whose_owner_is_not_current_user.each do |task|
-        task.update(assigned_user_id: task.task_owner_id)
+    def self.of_status(progress)
+      if progress == :pending
+        starred = pending.starred.order("updated_at DESC")
+        unstarred = pending.unstarred.order("updated_at DESC")
+      else
+        starred = completed.starred.order("updated_at DESC")
+        unstarred = completed.unstarred.order("updated_at DESC")
       end
+      starred + unstarred
     end
 end
