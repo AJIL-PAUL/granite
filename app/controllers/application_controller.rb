@@ -3,8 +3,7 @@
 class ApplicationController < ActionController::Base
   include ActionView::Helpers::TranslationHelper
   protect_from_forgery with: :exception
-  include Pundit
-  rescue_from Pundit::NotAuthorizedError, with: :handle_authorization_error
+  include Authorizable
 
   def authenticate_user_using_x_auth_token
     user_email = request.headers["X-Auth-Email"]
