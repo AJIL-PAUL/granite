@@ -64,5 +64,7 @@ group :development, :test do
   # For auto-generating demo data
   gem "faker"
 end
+gem "letter_opener", group: :development
 gem "pundit"
 gem "sidekiq"
+gem "sidekiq-cron"
